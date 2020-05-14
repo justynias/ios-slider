@@ -7,14 +7,23 @@
 //
 
 import UIKit
+//import InChargeRangeSlider
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var rangeSliderView: RangeSlider!
+    
+    
+    @IBAction func sliderHasChanged(_ sender: RangeSlider) {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        rangeSliderView.rightBubbleView.image = UIImage(named: "backgroundShapeRight")
+        rangeSliderView.rightBubbleView.image = UIImage(named: "backgroundShapeLeft")
+        
     }
-
-
+    
 }
 
