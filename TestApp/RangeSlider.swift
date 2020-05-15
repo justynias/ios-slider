@@ -242,32 +242,49 @@ import QuartzCore
     addContentViews()
     addBubbles()
   }
+    public var rightBubbleImage: UIImage? {
+        didSet {
+            rightBubbleView.image = rightBubbleImage
+            updateBubblesPosition()
+        }
+    }
     
-    public let rightBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
-      public let leftBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
-      
+    public var leftBubbleImage: UIImage? {
+        didSet {
+            leftBubbleView.image = leftBubbleImage
+            updateBubblesPosition()
+        }
+    }
+    
+     let rightBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
+        let leftBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
+      let rightBubbleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
+    
       func addBubbles() {
           
         addSubview(rightBubbleView)
+        
+        rightBubbleView.addSubview(rightBubbleLabel)
         addSubview(leftBubbleView)
         
       }
     
       func updateBubblesPosition() {
-        let lowerKnobCenter = positionForValue(lowerValue)
-        let upperKnobCenter = positionForValue(upperValue)
+        let lowerKnobStartingPoint = absoultePositionForValue(lowerValue)
+        let upperKnobStartingXPosition = absoultePositionForValue(upperValue).x + knobSize
         let halfKnobSize = KnobSize/2
-    
-        leftBubbleView.frame = CGRect(x: lowerKnobCenter.x-10, y: 0, width: 52, height: 37)
-        rightBubbleView.frame = CGRect(x: (upperKnobCenter.x-42), y: upperKnobCenter.y + halfKnobSize, width: 52, height: 37)
-      }
+        let imageWidth = rightBubbleView.image?.size.width ?? 0
+        let imageHight = rightBubbleView.image?.size.height ?? 0
+        
+        leftBubbleView.frame = CGRect(x: lowerKnobStartingPoint.x, y: 0, width: imageWidth, height: imageHight)
+        rightBubbleView.frame = CGRect(x: (upperKnobStartingXPosition-imageWidth), y: frame.size.height - imageHight, width: imageWidth, height: imageHight)
+        
+    }
   
     func adjustToClosestValue() {
     
         lowerValue = round(lowerValue)
         upperValue = round(upperValue)
-        print(lowerValue)
-        print(upperValue)
         UIView.animate(withDuration: 0.18) {
             self.updateBubblesPosition()
         }
@@ -356,6 +373,7 @@ import QuartzCore
   
   ///Updates the labels text content.
   open func updateLabelText() {
+    rightBubbleLabel.text = getLabelText(forValue: upperValue)
     if hideLabels {
       lowerLabel.string = ""
       upperLabel.string = ""
@@ -466,7 +484,6 @@ import QuartzCore
     var deltaValue = (maximumValue - minimumValue) * deltaLocation / Double(bounds.width - KnobSize)
     
     if abs(deltaValue) < stepValue {
-        print("deltta < step \(deltaValue)")
       //return true
     }
     
@@ -493,13 +510,25 @@ import QuartzCore
     }
     else if lowerKnob.highlighted {
       let newLowerValue = lowerValue + deltaValue
-      lowerValue = boundValue(newLowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
-//        UIView.animate(withDuration: 0.18) {
-//                          self.updateBubblesPosition()
-//                      }
+        print("newLowerValue: \(newLowerValue) == upperValue: \(upperValue)")
+        print(abs(newLowerValue - upperValue))
+               if abs(newLowerValue - upperValue)<0.5{
+                    print(lowerValue)
+                    lowerValue = boundValue(lowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
+               } else{
+                 lowerValue = boundValue(newLowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
+        }
+     
+       
     } else if upperKnob.highlighted {
       let newUpperValue = upperValue + deltaValue
-      upperValue = boundValue(newUpperValue, toLowerValue: (lowerValue + minimumDistance), upperValue: maximumValue)
+        print(abs(newUpperValue - lowerValue))
+               if abs(newUpperValue - lowerValue)<0.5{
+                    upperValue = boundValue(upperValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
+               }else{
+                 upperValue = boundValue(newUpperValue, toLowerValue: (lowerValue + minimumDistance), upperValue: maximumValue)
+                }
+     
     }
     
     sendActions(for: .valueChanged)
@@ -563,6 +592,28 @@ import QuartzCore
     return CGPoint(x: xPosition + knobDeltaX, y: yPosition)
    //return CGPoint(x: xPosition, y: yPosition)
   }
+ 
+    func absoultePositionForValue(_ value: Double) -> CGPoint {
+      if maximumValue == minimumValue {
+        return CGPoint(x: 0, y: 0)
+      }
+      
+      let percentage = percentageForValue(value)
+      
+      let knobDeltaWidth:CGFloat = -(KnobSize - (RangeSliderKnob.KnobDelta * 2))
+      
+      //let xPosition = (bounds.width + knobDeltaWidth) * percentage
+      
+    let xPosition = (bounds.width - knobSize) * percentage
+        
+      let yPosition = track.frame.midY
+      
+     
+     return CGPoint(x: xPosition, y: yPosition)
+    }
+    
+    
+    
   
   func percentageForValue(_ value: Double) -> CGFloat {
     if minimumValue == maximumValue {

@@ -21,9 +21,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        rangeSliderView.rightBubbleView.image = UIImage(named: "backgroundShapeRight")
-        rangeSliderView.leftBubbleView.image = UIImage(named: "backgroundShapeLeft")
-        
+        rangeSliderView.rightBubbleImage = UIImage(named: "backgroundShapeRight")
+        rangeSliderView.leftBubbleImage = UIImage(named: "backgroundShapeLeft")
     }
     
 }
