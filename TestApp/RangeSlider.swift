@@ -175,7 +175,22 @@ import QuartzCore
       updateLabelText()
     }
   }
-  
+    //
+    ///The font size of the bubble labels. `12.0` by default.
+    @IBInspectable open var bubbleLabelFontSize: CGFloat = 12.0 {
+      didSet {
+        updateBubblesLabelText()
+      }
+    }
+    
+    ///The color of the lbubble abels. `UIColor.clear` by default.
+    @IBInspectable open var bubbleLabelColor: UIColor = UIColor.clear {
+      didSet {
+        updateBubblesLabelText()
+      }
+    }
+    
+    
   var previousLocation = CGPoint()
   var previouslySelectedKnob = Knob.Neither
   
@@ -259,13 +274,13 @@ import QuartzCore
      let rightBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
         let leftBubbleView = UIImageView(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
       let rightBubbleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
-    
+     let leftBubbleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 52, height: 37))
       func addBubbles() {
           
         addSubview(rightBubbleView)
-        
         rightBubbleView.addSubview(rightBubbleLabel)
         addSubview(leftBubbleView)
+        leftBubbleView.addSubview(leftBubbleLabel)
         
       }
     
@@ -278,7 +293,6 @@ import QuartzCore
         
         leftBubbleView.frame = CGRect(x: lowerKnobStartingPoint.x, y: 0, width: imageWidth, height: imageHight)
         rightBubbleView.frame = CGRect(x: (upperKnobStartingXPosition-imageWidth), y: frame.size.height - imageHight, width: imageWidth, height: imageHight)
-        
     }
   
     func adjustToClosestValue() {
@@ -346,6 +360,7 @@ import QuartzCore
     upperKnob.setNeedsDisplay()
     
     updateLabelText()
+    updateBubblesLabelText()
     updateLabelPositions()
     updateBubblesPosition()
     CATransaction.commit()
@@ -370,10 +385,21 @@ import QuartzCore
         
         return labelText
     }
-  
+    
+    open func updateBubblesLabelText(){
+        rightBubbleLabel.text = getLabelText(forValue: upperValue)
+        leftBubbleLabel.text = getLabelText(forValue: lowerValue)
+          print(bubbleLabelFontSize)
+        rightBubbleLabel.font = UIFont.systemFont(ofSize: bubbleLabelFontSize)
+         leftBubbleLabel.font = UIFont.systemFont(ofSize: bubbleLabelFontSize)
+        rightBubbleLabel.textAlignment = .center
+        leftBubbleLabel.textAlignment = .center
+        rightBubbleLabel.textColor = bubbleLabelColor
+        leftBubbleLabel.textColor = bubbleLabelColor
+    }
   ///Updates the labels text content.
   open func updateLabelText() {
-    rightBubbleLabel.text = getLabelText(forValue: upperValue)
+
     if hideLabels {
       lowerLabel.string = ""
       upperLabel.string = ""
@@ -510,10 +536,7 @@ import QuartzCore
     }
     else if lowerKnob.highlighted {
       let newLowerValue = lowerValue + deltaValue
-        print("newLowerValue: \(newLowerValue) == upperValue: \(upperValue)")
-        print(abs(newLowerValue - upperValue))
                if abs(newLowerValue - upperValue)<0.5{
-                    print(lowerValue)
                     lowerValue = boundValue(lowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
                } else{
                  lowerValue = boundValue(newLowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
@@ -522,7 +545,6 @@ import QuartzCore
        
     } else if upperKnob.highlighted {
       let newUpperValue = upperValue + deltaValue
-        print(abs(newUpperValue - lowerValue))
                if abs(newUpperValue - lowerValue)<0.5{
                     upperValue = boundValue(upperValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
                }else{
@@ -590,9 +612,9 @@ import QuartzCore
     let yPosition = track.frame.midY
     
     return CGPoint(x: xPosition + knobDeltaX, y: yPosition)
-   //return CGPoint(x: xPosition, y: yPosition)
   }
  
+    // TODO mine
     func absoultePositionForValue(_ value: Double) -> CGPoint {
       if maximumValue == minimumValue {
         return CGPoint(x: 0, y: 0)

@@ -40,13 +40,30 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="upperValue">
                                         <real key="value" value="3"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="labelColor">
-                                        <color key="value" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="labelFontSize">
-                                        <real key="value" value="23"/>
-                                    </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="trueKnobSize" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="knobTintColor">
+                                        <color key="value" red="0.12406129389999999" green="0.44136944410000001" blue="0.70919698480000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="knobBorderTintColor">
+                                        <color key="value" red="0.12406129389999999" green="0.44136944410000001" blue="0.70919698480000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="trackHighlightTintColor">
+                                        <color key="value" red="0.12406129389999999" green="0.44136944410000001" blue="0.70919698480000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="trackTintColor">
+                                        <color key="value" red="0.82425421480000005" green="0.89004236459999997" blue="0.94235700369999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="trueTrackThickness" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="trackThickness">
+                                        <real key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bubbleLabelColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="bubbleLabelFontSize">
+                                        <real key="value" value="14"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="sliderHasChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="d7W-4W-X1m"/>
