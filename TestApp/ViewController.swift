@@ -15,8 +15,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func sliderHasChanged(_ sender: RangeSlider) {
-//        print("lower value: \(sender.lowerValue)")
-//        print("upper value: \(sender.upperValue)")
+        
     }
     
     override func viewDidLoad() {

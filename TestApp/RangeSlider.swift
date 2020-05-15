@@ -176,6 +176,7 @@ import QuartzCore
         }
     }
     
+    
     var previousLocation = CGPoint()
     var previouslySelectedKnob = Knob.Neither
     
@@ -257,6 +258,38 @@ import QuartzCore
         }
     }
     
+    ////The right marigin top margin. `0` by default
+    @IBInspectable open var  rightBubbleTopMargin: CGFloat = 0 {
+        didSet {
+            updateBubbleLabelsPosition()
+            updateBubblesPosition()
+        }
+    }
+    
+    ////The right marigin bottom margin. `0` by default
+    @IBInspectable open var  rightBubbleBottomMargin: CGFloat = 0 {
+         didSet {
+             updateBubbleLabelsPosition()
+             updateBubblesPosition()
+         }
+     }
+    
+    ////The left marigin top margin. `0` by default
+     @IBInspectable open var leftBubbleTopMargin: CGFloat = 0 {
+         didSet {
+             updateBubbleLabelsPosition()
+             updateBubblesPosition()
+         }
+     }
+    
+     ////The left marigin bottom margin. `0` by default
+     @IBInspectable open var leftBubbleBottomMargin: CGFloat = 0 {
+         didSet {
+             updateBubbleLabelsPosition()
+             updateBubblesPosition()
+         }
+     }
+    
     public var leftBubbleImage: UIImage? {
         didSet {
             leftBubbleView.image = leftBubbleImage
@@ -306,10 +339,15 @@ import QuartzCore
     let leftBubbleLabel = UILabel()
     
     func updateBubbleLabelsPosition() {
-        leftBubbleLabel.frame = CGRect(x: 0, y: 0, width: leftBubbleImageWidth, height: leftBubbleImageHeight)
-        rightBubbleLabel.frame = CGRect(x: 0, y: 0, width: rightBubbleImageWidth, height: rightBubbleImageHeight)
+        let leftBubbleLabelHeight = leftBubbleImageHeight - leftBubbleBottomMargin - leftBubbleTopMargin
+        let rightBubbleLabelHeight = rightBubbleImageHeight - rightBubbleBottomMargin - rightBubbleTopMargin
+        
+        leftBubbleLabel.frame = CGRect(x: 0, y: leftBubbleTopMargin, width: leftBubbleImageWidth, height: leftBubbleLabelHeight)
+        rightBubbleLabel.frame = CGRect(x: 0, y: rightBubbleTopMargin, width: rightBubbleImageWidth, height: rightBubbleLabelHeight)
+        
     }
     
+
     func addBubbles() {
         addSubview(rightBubbleView)
         rightBubbleView.addSubview(rightBubbleLabel)
@@ -418,10 +456,17 @@ import QuartzCore
         
         return labelText
     }
+    open func getBubbleLabelText(forValue value: Double) -> String {
+    
+        let labelText = getLabelText(forValue: value)
+        let labelTextFormatted = "\(labelText):00"
+        return labelTextFormatted
+    }
+    
     
     open func updateBubblesLabelText(){
-        rightBubbleLabel.text = getLabelText(forValue: upperValue)
-        leftBubbleLabel.text = getLabelText(forValue: lowerValue)
+        rightBubbleLabel.text = getBubbleLabelText(forValue: upperValue)
+        leftBubbleLabel.text = getBubbleLabelText(forValue: lowerValue)
         
         rightBubbleLabel.font = UIFont.systemFont(ofSize: bubbleLabelFontSize)
         leftBubbleLabel.font = UIFont.systemFont(ofSize: bubbleLabelFontSize)
