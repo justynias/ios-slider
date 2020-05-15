@@ -231,7 +231,7 @@ import QuartzCore
     super.init(frame: frame)
     addContentViews()
   }
-  
+    
   /**
    Initializes the `RangeSlider` instance from the storyboard.
    
@@ -254,14 +254,20 @@ import QuartzCore
       }
     
       func updateBubblesPosition() {
-          let lowerKnobCenter = positionForValue(lowerValue)
-          
-          rightBubbleView.frame = CGRect(x: lowerKnobCenter.x, y: 0, width: 52, height: 37)
-          
+        let lowerKnobCenter = positionForValue(lowerValue)
+        let upperKnobCenter = positionForValue(upperValue)
+        let halfKnobSize = KnobSize/2
+    
+        leftBubbleView.frame = CGRect(x: lowerKnobCenter.x-10, y: 0, width: 52, height: 37)
+        rightBubbleView.frame = CGRect(x: (upperKnobCenter.x-42), y: upperKnobCenter.y + halfKnobSize, width: 52, height: 37)
       }
   
     func adjustToClosestValue() {
-        lowerValue = 3
+    
+        lowerValue = round(lowerValue)
+        upperValue = round(upperValue)
+        print(lowerValue)
+        print(upperValue)
         UIView.animate(withDuration: 0.18) {
             self.updateBubblesPosition()
         }
@@ -460,11 +466,12 @@ import QuartzCore
     var deltaValue = (maximumValue - minimumValue) * deltaLocation / Double(bounds.width - KnobSize)
     
     if abs(deltaValue) < stepValue {
-      return true
+        print("deltta < step \(deltaValue)")
+      //return true
     }
     
     if stepValue != 0 {
-      deltaValue = deltaValue < 0 ? -stepValue : stepValue
+      //deltaValue = deltaValue < 0 ? -stepValue : stepValue
     }
     
     previousLocation = location
@@ -474,6 +481,7 @@ import QuartzCore
       if (deltaValue > 0) {
         let newUpperValue = upperValue + deltaValue
         upperValue = boundValue(newUpperValue, toLowerValue: (lowerValue + max(minimumDistance, gap)), upperValue: maximumValue)
+        
         let newLowerValue = lowerValue + deltaValue
         lowerValue = boundValue(newLowerValue, toLowerValue: minimumValue, upperValue: (upperValue - max(minimumDistance, gap)))
       } else {
@@ -486,6 +494,9 @@ import QuartzCore
     else if lowerKnob.highlighted {
       let newLowerValue = lowerValue + deltaValue
       lowerValue = boundValue(newLowerValue, toLowerValue: minimumValue, upperValue: (upperValue - minimumDistance))
+//        UIView.animate(withDuration: 0.18) {
+//                          self.updateBubblesPosition()
+//                      }
     } else if upperKnob.highlighted {
       let newUpperValue = upperValue + deltaValue
       upperValue = boundValue(newUpperValue, toLowerValue: (lowerValue + minimumDistance), upperValue: maximumValue)
@@ -550,6 +561,7 @@ import QuartzCore
     let yPosition = track.frame.midY
     
     return CGPoint(x: xPosition + knobDeltaX, y: yPosition)
+   //return CGPoint(x: xPosition, y: yPosition)
   }
   
   func percentageForValue(_ value: Double) -> CGFloat {
